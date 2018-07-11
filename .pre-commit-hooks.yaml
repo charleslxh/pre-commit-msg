@@ -1,0 +1,7 @@
+- id: php-lint-all
+  name: Commit Message Check
+  description: Check commit message with user friendly messages and colors
+  entry: pre_commit_hooks/php-lint.sh
+  language: script
+  files: \.php$
+  args: [-s all]
