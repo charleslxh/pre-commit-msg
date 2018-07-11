@@ -1,0 +1,6 @@
+This is the regular expression stored in a bash variable, re - i.e. what you want your input string to match, and hopefully extract a substring. Breaking it down:
+
+http:// is just a string - the input string must contain this substring for the regular expression to match
+[] Normally square brackets are used say "match any character within the brackets". So c[ao]t would match both "cat" and "cot". The ^ character within the [] modifies this to say "match any character except those within the square brackets. So in this case [^/] will match any character apart from "/".
+The square bracket expression will only match one character. Adding a + to the end of it says "match 1 or more of the preceding sub-expression". So [^/]+ matches 1 or more of the set of all characters, excluding "/".
+Putting () parentheses around a subexpression says that you want to save whatever matched that subexpression for later processing. If the language you are using supports this, it will provide some mechanism to retrieve these submatches. For bash, it is the BASH_REMATCH array.
