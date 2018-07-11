@@ -12,14 +12,14 @@
 # - None
 
 # Echo Colors
-msg_color_green='\033[0;32m'
-msg_color_magenta='\e[1;35m';
-msg_color_yellow='\e[0;33m';
+msg_color_green="\033[0;32m"
+msg_color_magenta='\033[0;31m';
+msg_color_yellow='\033[0;33m';
 msg_color_none='\033[0m'; # No Color
 
 # Echo Error Message
 MESSAGE_TOO_SHORT="${msg_color_yellow}INVALID COMMIT MSG: commit message too short!${msg_color_none} \n"
-MESSAGE_TOO_LONG="${msg_color_yellow}INVALID COMMIT MSG: commit message too long!${msg_color_none}"
+MESSAGE_TOO_LONG="${msg_color_yellow}INVALID COMMIT MSG: commit message too long!${msg_color_none} \n"
 INVALID_COMMIT_TIP="${msg_color_magenta}INVALID COMMIT MSG: does not match '<type>(<scope>): <subject>'!${msg_color_none} \n";
 
 MIN_LENGTH=10;
@@ -35,14 +35,14 @@ SPLIT_COMMIT_PATTERN='^Split[[:space:]]+.*$';
 # fixup! and squash! are part of Git, commits tagged with them are not intended to be merged, cf. https://git-scm.com/docs/git-commit
 GIT_INTERNAL_PATTERN='^((fixup![[:space:]]|squash![[:space:]])?(\w+)(?:\(([^\)\s]+)\))?: (.+))(?:\n|$)';
 # Custom commit message
-CUSTOM_COMMIT_PATTERN='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert):[[:space:]]+.*$';
+CUSTOM_COMMIT_PATTERN='^(feature|fix|docs|style|refactor|perf|test|build|ci|chore|revert):[[:space:]]+.*$';
 
 commitMessage=`eval cat $1 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`;
 
-echo "Checking commit message: ${msg_color_green}$commitMessage${msg_color_none}"
+echo -en "Checking commit message: ${msg_color_green}$commitMessage${msg_color_none} \n"
 
-[ ${#commitMessage} -le $MIN_LENGTH ] && echo "$MESSAGE_TOO_SHORT" && exit 1;
-[ ${#commitMessage} -ge $MAX_LENGTH ] && echo "$MESSAGE_TOO_LONG" && exit 1;
+[ ${#commitMessage} -le $MIN_LENGTH ] && echo -en "$MESSAGE_TOO_SHORT" && exit 1;
+[ ${#commitMessage} -ge $MAX_LENGTH ] && echo -en "$MESSAGE_TOO_LONG" && exit 1;
 
 patterns=(
   $IGNORE_COMMIT_PATTERN
@@ -61,5 +61,5 @@ do
   fi
 done
 
-echo "$INVALID_COMMIT_TIP";
+echo -en "$INVALID_COMMIT_TIP";
 exit 1;
