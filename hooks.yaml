@@ -1,5 +1,5 @@
-- id: php-lint-all
+- id: check-commit-msg
   name: Commit Message Check
   description: Check commit message with user friendly messages and colors
-  entry: check-commit-msg.sh
+  entry: pre_commit_hooks/check-commit-msg.sh
   language: script
