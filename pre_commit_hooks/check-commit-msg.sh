@@ -37,9 +37,43 @@ GIT_INTERNAL_PATTERN='^((fixup![[:space:]]|squash![[:space:]])?(\w+)(?:\(([^\)\s
 # Custom commit message
 CUSTOM_COMMIT_PATTERN='^(feature|fix|docs|style|refactor|perf|test|build|ci|chore|revert):[[:space:]]+.*$';
 
-commitMessage=`eval cat $1 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`;
+COMMIT_EDITMSG=$1; shift;
 
-echo -en "Checking commit message: ${msg_color_green}$commitMessage${msg_color_none} \n"
+if [ -f "$COMMIT_EDITMSG" ]
+then
+  commitMessage=`head -n 1 $COMMIT_EDITMSG`;
+else
+  commitMessage="$COMMIT_EDITMSG"
+fi
+
+commitMessage=`echo "$commitMessage" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`
+
+while getopts ':g:l:h' FLAG; do
+  case ${FLAG} in
+    g )
+      MIN_LENGTH=$OPTARG;
+      ;;
+    l )
+      MAX_LENGTH=$OPTARG;
+      ;;
+    h )
+      echo "Options:"
+      echo "    -h  Display this help message."
+      echo "    -g  Sprcify the min length of commit message."
+      echo "    -l  Sprcify the max length of commit message."
+      echo -e "\nUsage:"
+      echo "    checl-commit-msg commit_message_here -g 20 -l 150"
+      exit 0
+      ;;
+    \? )
+      echo "Invalid Option: -$OPTARG" 1>&2
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+echo -en "Checking commit message: ${msg_color_green}$commitMessage${msg_color_none} \n";
 
 [ ${#commitMessage} -le $MIN_LENGTH ] && echo -en "$MESSAGE_TOO_SHORT" && exit 1;
 [ ${#commitMessage} -ge $MAX_LENGTH ] && echo -en "$MESSAGE_TOO_LONG" && exit 1;
