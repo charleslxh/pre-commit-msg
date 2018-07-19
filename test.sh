@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 # Echo Colors
 msg_color_green="\033[0;32m"
@@ -14,19 +14,16 @@ testCase() {
   script=$2;
   excepExitCode=$3;
 
-  echo -en "$num: $description: "
-
   bash ./pre_commit_hooks/check-commit-msg.sh $script > /dev/null
 
   if [ "$?" -eq $excepExitCode ]
   then
     let passed++
-    echo -en "${msg_color_green}✔ passed${msg_color_none}\n"
+    echo "$num: $description: ${msg_color_green}✔ passed${msg_color_none}"
   else
     let failed++
-    echo -en "${msg_color_magenta}× failed${msg_color_none}\n\n"
-    echo -en "      excepted exit with code ${msg_color_green}$excepExitCode${msg_color_none}, but got ${msg_color_magenta}$?${msg_color_none}. \n"
-    echo -en "\n"
+    echo "$num: $description: ${msg_color_magenta}× failed${msg_color_none}\n"
+    echo "      excepted exit with code ${msg_color_green}$excepExitCode${msg_color_none}, but got ${msg_color_magenta}$?${msg_color_none}.\n"
   fi
 
   let num++
@@ -40,8 +37,8 @@ testCase 'commit message must not too short, default min length: 10' 'test/messa
 testCase 'revert message is allowed, e.g: "Revert ...."' 'test/revert_request_message' 0
 testCase 'Split message is allowed, e.g: "Split ...."' 'test/split_request_message' 0
 
-echo -en "Summary:\n"
-echo -en "    ${msg_color_green}passed count:${msg_color_none} $passed\n"
-echo -en "    ${msg_color_magenta}failed count:${msg_color_none} $failed\n"
+echo "Summary:\n"
+echo "    ${msg_color_green}passed count:${msg_color_none} $passed"
+echo "    ${msg_color_magenta}failed count:${msg_color_none} $failed"
 
 [ "$failed" -eq 0 ] && exit 0 || exit 1
