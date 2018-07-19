@@ -73,10 +73,10 @@ while getopts ':g:l:h' FLAG; do
 done
 shift $((OPTIND -1))
 
-echo "Checking commit message: ${msg_color_green}$commitMessage${msg_color_none} \n";
+echo -e "Checking commit message: ${msg_color_green}$commitMessage${msg_color_none} \n";
 
-[ ${#commitMessage} -le $MIN_LENGTH ] && echo "$MESSAGE_TOO_SHORT" && exit 1;
-[ ${#commitMessage} -ge $MAX_LENGTH ] && echo "$MESSAGE_TOO_LONG" && exit 1;
+[ ${#commitMessage} -le $MIN_LENGTH ] && echo -e "$MESSAGE_TOO_SHORT" && exit 1;
+[ ${#commitMessage} -ge $MAX_LENGTH ] && echo -e "$MESSAGE_TOO_LONG" && exit 1;
 
 patterns=(
   $IGNORE_COMMIT_PATTERN
@@ -95,5 +95,5 @@ do
   fi
 done
 
-echo "$INVALID_COMMIT_TIP";
+echo -e "$INVALID_COMMIT_TIP";
 exit 1;
